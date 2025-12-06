@@ -10,116 +10,21 @@
     <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. 基础布局与背景 --- */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: linear-gradient(to bottom, #ffdee9 0%, #b5fffc 100%); 
-            font-family: 'ZCOOL KuaiLe', cursive;
-        }
-
-        /* --- 2. 互动画布 (背景特效) --- */
-        #canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        /* --- 3. 中间文字容器 --- */
-        .container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-            text-align: center;
-            width: 100%;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        h1 {
-            color: #ff5e78;
-            font-size: 3.5rem;
-            line-height: 1.4;
-            margin: 0;
-            text-shadow: 2px 2px 0px #fff, 4px 4px 10px rgba(255, 94, 120, 0.3);
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        h2 {
-            color: #ff99ac;
-            font-size: 2rem;
-            margin-top: 10px;
-            font-weight: normal;
-        }
-
-        /* --- 4. 音乐图标样式 --- */
-        .music-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 999;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            border: 2px solid #ff5e78;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(255, 94, 120, 0.3);
-        }
-
-        /* 音乐播放时的旋转动画 */
-        .rotate {
-            animation: spin 3s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .music-icon {
-            width: 20px;
-            height: 20px;
-            fill: #ff5e78;
-        }
-
-        /* --- 5. 文字Q弹动画 --- */
+        /* --- 样式部分保持不变 --- */
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: linear-gradient(to bottom, #ffdee9 0%, #b5fffc 100%); font-family: 'ZCOOL KuaiLe', cursive; }
+        #canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .container { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 10; text-align: center; width: 100%; user-select: none; -webkit-tap-highlight-color: transparent; }
+        h1 { color: #ff5e78; font-size: 3.5rem; line-height: 1.4; margin: 0; text-shadow: 2px 2px 0px #fff, 4px 4px 10px rgba(255, 94, 120, 0.3); cursor: pointer; transition: transform 0.1s; }
+        h2 { color: #ff99ac; font-size: 2rem; margin-top: 10px; font-weight: normal; }
+        .lyric-box { margin-top: 30px; height: 40px; color: #446699; font-size: 1.3rem; text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); transition: opacity 0.3s; opacity: 1; font-weight: bold; }
+        .music-btn { position: fixed; top: 20px; right: 20px; z-index: 999; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.6); border-radius: 50%; border: 2px solid #ff5e78; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 10px rgba(255, 94, 120, 0.3); }
+        .rotate { animation: spin 3s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .music-icon { width: 20px; height: 20px; fill: #ff5e78; }
         .jelly { animation: jelly 0.6s; }
-        @keyframes jelly {
-            0%, 100% { transform: scale(1, 1); }
-            25% { transform: scale(0.9, 1.1); }
-            50% { transform: scale(1.1, 0.9); }
-            75% { transform: scale(0.95, 1.05); }
-        }
-
-        @media (max-width: 768px) {
-            h1 { font-size: 2.8rem; }
-            h2 { font-size: 1.5rem; }
-        }
-        
-        .hint {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            text-align: center;
-            color: #aaa;
-            font-size: 0.8rem;
-            z-index: 5;
-            opacity: 0.7;
-        }
+        @keyframes jelly { 0%, 100% { transform: scale(1, 1); } 25% { transform: scale(0.9, 1.1); } 50% { transform: scale(1.1, 0.9); } 75% { transform: scale(0.95, 1.05); } }
+        @media (max-width: 768px) { h1 { font-size: 2.8rem; } h2 { font-size: 1.5rem; } .lyric-box { font-size: 1.1rem; } }
+        .hint { position: absolute; bottom: 20px; width: 100%; text-align: center; color: #aaa; font-size: 0.8rem; z-index: 5; opacity: 0.7; }
     </style>
 </head>
 <body>
@@ -139,35 +44,150 @@
     <div class="container">
         <h1 id="main-text" onclick="bounce(this)">阿佳宝宝</h1>
         <h2 onclick="bounce(this)">我爱你</h2>
+        <div class="lyric-box" id="lyric-display"></div>
     </div>
 
     <div class="hint">点击屏幕开启惊喜</div>
 
     <script>
-        // --- 音乐控制逻辑 ---
-        const audio = document.getElementById('bgm');
-        const musicBtn = document.getElementById('musicBtn');
-        let isPlaying = true; // 默认状态我们希望是播放的
+        // ==========================================
+        //  👇 请把你的 LRC 文件内容粘贴到下面两个反引号中间
+        // ==========================================
+        const lrcFileContent = `
+[00:00.0]恋爱画板 - 锦零
+[00:00.13]词：李师珏
+[00:00.2]曲：李师珏
+[00:00.28]编曲：李师珏
+[00:00.38]音乐制作人：张博文Bryan Z
+[00:00.57]吉他：齐成刚
+[00:00.66]和音编写：金钊
+[00:00.77]和音：王超
+[00:00.85]混音/母带工程：李晨曦
+[00:01.04]录音师：丁有钱
+[00:01.15]录音棚：KG音乐工厂
+[00:01.31]混音/母带工作室：Bryan Z Music Studio
+[00:01.53]制作助理：宋子楚/刘哲/袁永达
+[00:01.8]监制：张博文Bryan Z
+[00:01.93]音乐制作：华昇音乐（天津）有限公司
+[00:02.2]封面设计：Zisswn
+[00:02.29]音乐项目总监：宫尹琳Rainie
+[00:02.48]总企划：马越/陈钰彬
+[00:02.66]企划营销：Hot Cake Studio
+[00:02.79]OP：天津华昇集团有限公司
+[00:03.0]SP：Hot Cake Studio
+[00:03.07]出品：Hot Cake Studio
+[00:03.17]「未经许可 不得翻唱翻录或使用」
+[00:03.46]爱情有紫色红色蓝色白色四种颜色
+[00:09.05]绘画出恋爱中绚烂的世界
+[00:27.11]开始的时候
+[00:29.86]牵你的手都会颤抖
+[00:33.52]我把这种感觉叫做紫色
+[00:39.84]终于慢慢的熟悉了
+[00:43.14]世界只剩你和我
+[00:46.04]只有红色表达的透彻
+[00:51.8]有时我也会有蓝色的小脾气
+[00:57.66]只要你能接受这点小情绪
+[01:03.32]我愿为你穿上永恒的白色婚纱
+[01:09.35]爱情有紫色红色蓝色白色四种颜色
+[01:15.2]绘画出恋爱中绚烂的世界
+[01:21.76]紫色是美好的
+[01:25.38]红色热烈
+[01:27.69]蓝色不可避免
+[01:29.76]白色可否能长一些
+[01:33.119995]爱情有紫色红色蓝色白色四种颜色
+[01:39.17]每种都代表我对你的感觉
+[01:45.6]也许我们有与生俱来的差别
+[01:51.55]但你的一切我了解
+[02:06.75]有时我也会有蓝色的小脾气
+[02:12.69]只要你能接受这点小情绪
+[02:18.19]我愿为你穿上永恒的白色婚纱
+[02:24.28]爱情有紫色红色蓝色白色四种颜色
+[02:30.19]绘画出恋爱中绚烂的世界
+[02:37.15]紫色是美好的
+[02:40.33]红色热烈
+[02:42.73]蓝色不可避免
+[02:44.73]白色可否能长一些
+[02:48.31]爱情有紫色红色蓝色白色四种颜色
+[02:54.14]每种都代表我对你的感觉
+[03:00.74]也许我们有与生俱来的差别
+[03:06.48]但你的一切我了解
+[03:12.46]但你的一切我了解
+`;
+        // ==========================================
 
-        // 尝试自动播放 (大部分浏览器会拦截，所以需要下面的点击触发)
+        // --- 1. LRC 解析器 (自动把上面的文字转换成代码能读懂的时间) ---
+        function parseLrc(lrc) {
+            const lines = lrc.split('\n');
+            const result = [];
+            for (let line of lines) {
+                // 正则表达式匹配 [00:00.00] 格式
+                const match = line.match(/\[(\d{2}):(\d{2})(\.\d{2,3})?\](.*)/);
+                if (match) {
+                    const min = parseInt(match[1]);
+                    const sec = parseInt(match[2]);
+                    const ms = match[3] ? parseFloat(match[3]) : 0;
+                    const text = match[4].trim(); // 获取歌词文本
+                    
+                    // 算出总秒数
+                    const time = min * 60 + sec + ms;
+                    
+                    if (text) { // 如果这行有字才加进去
+                        result.push({ time, text });
+                    }
+                }
+            }
+            return result;
+        }
+
+        // 解析歌词
+        const lyricData = parseLrc(lrcFileContent);
+
+        // --- 2. 歌词同步逻辑 ---
+        const lyricDisplay = document.getElementById('lyric-display');
+        const audio = document.getElementById('bgm');
+        
+        audio.addEventListener('timeupdate', function() {
+            const currentTime = audio.currentTime;
+            
+            // 查找当前时间对应的歌词
+            let currentText = "";
+            for (let i = 0; i < lyricData.length; i++) {
+                if (currentTime >= lyricData[i].time) {
+                    currentText = lyricData[i].text;
+                } else {
+                    break; 
+                }
+            }
+            
+            if (lyricDisplay.innerText !== currentText) {
+                // 简单的淡入淡出效果
+                lyricDisplay.style.opacity = 0;
+                setTimeout(() => {
+                    lyricDisplay.innerText = currentText;
+                    lyricDisplay.style.opacity = 1;
+                }, 150);
+            }
+        });
+
+        // --- 3. 音乐控制与特效 (保持不变) ---
+        const musicBtn = document.getElementById('musicBtn');
+        let isPlaying = true; 
+
         window.addEventListener('load', () => {
              audio.play().catch(() => {
-                 // 如果自动播放被拦截，先停止旋转动画
                  isPlaying = false;
                  musicBtn.classList.remove('rotate');
              });
         });
 
-        // 全局点击触发：用户第一次点击屏幕任何地方，就尝试播放音乐
         document.body.addEventListener('click', function() {
             if (!isPlaying) {
                 audio.play();
                 isPlaying = true;
                 musicBtn.classList.add('rotate');
             }
-        }, { once: true }); // 只触发一次
+        }, { once: true });
 
-        // 按钮手动控制开关
         function toggleMusic() {
             if (isPlaying) {
                 audio.pause();
@@ -177,22 +197,17 @@
                 musicBtn.classList.add('rotate');
             }
             isPlaying = !isPlaying;
-            // 阻止冒泡，防止触发 bounce
             event.stopPropagation();
         }
 
-        // --- 文字与特效逻辑 (保持不变) ---
         function bounce(element) {
             element.classList.remove('jelly');
             void element.offsetWidth;
             element.classList.add('jelly');
-            
             const rect = element.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-            for(let i=0; i<10; i++) {
-                createHeart(centerX, centerY);
-            }
+            for(let i=0; i<10; i++) { createHeart(centerX, centerY); }
         }
 
         const canvas = document.getElementById('canvas');
@@ -218,14 +233,12 @@
                 this.life = 1;
                 this.decay = Math.random() * 0.02 + 0.01;
             }
-
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
                 this.size -= 0.1;
                 this.life -= this.decay;
             }
-
             draw() {
                 ctx.fillStyle = this.color;
                 ctx.globalAlpha = this.life;
@@ -240,47 +253,29 @@
                 ctx.globalAlpha = 1;
             }
         }
-
-        function createHeart(x, y) {
-            hearts.push(new Heart(x, y));
-        }
-
+        function createHeart(x, y) { hearts.push(new Heart(x, y)); }
         function animate() {
             ctx.clearRect(0, 0, width, height);
             for (let i = 0; i < hearts.length; i++) {
                 hearts[i].update();
                 hearts[i].draw();
-                if (hearts[i].life <= 0 || hearts[i].size <= 0) {
-                    hearts.splice(i, 1);
-                    i--;
-                }
+                if (hearts[i].life <= 0 || hearts[i].size <= 0) { hearts.splice(i, 1); i--; }
             }
             requestAnimationFrame(animate);
         }
         animate();
-
-        window.addEventListener('mousemove', (e) => {
-            createHeart(e.clientX, e.clientY);
-        });
-
+        window.addEventListener('mousemove', (e) => { createHeart(e.clientX, e.clientY); });
         window.addEventListener('touchmove', (e) => {
             e.preventDefault();
-            for (let i = 0; i < e.touches.length; i++) {
-                createHeart(e.touches[i].clientX, e.touches[i].clientY);
-            }
+            for (let i = 0; i < e.touches.length; i++) { createHeart(e.touches[i].clientX, e.touches[i].clientY); }
         }, { passive: false });
-
         window.addEventListener('touchstart', (e) => {
             for (let i = 0; i < e.touches.length; i++) {
                 createHeart(e.touches[i].clientX, e.touches[i].clientY);
                 createHeart(e.touches[i].clientX, e.touches[i].clientY);
             }
         });
-
-        setInterval(() => {
-            createHeart(Math.random() * width, height + 20);
-        }, 500);
-
+        setInterval(() => { createHeart(Math.random() * width, height + 20); }, 500);
     </script>
 </body>
 </html>
