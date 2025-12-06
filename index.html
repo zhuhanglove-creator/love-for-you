@@ -10,20 +10,54 @@
     <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 样式部分保持不变 --- */
+        /* --- 1. 基础样式 --- */
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: linear-gradient(to bottom, #ffdee9 0%, #b5fffc 100%); font-family: 'ZCOOL KuaiLe', cursive; }
         #canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        .container { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); z-index: 10; text-align: center; width: 100%; user-select: none; -webkit-tap-highlight-color: transparent; }
+        
+        /* --- 2. 内容容器 --- */
+        .container { 
+            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); 
+            z-index: 10; text-align: center; width: 100%; user-select: none; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+
         h1 { color: #ff5e78; font-size: 3.5rem; line-height: 1.4; margin: 0; text-shadow: 2px 2px 0px #fff, 4px 4px 10px rgba(255, 94, 120, 0.3); cursor: pointer; transition: transform 0.1s; }
         h2 { color: #ff99ac; font-size: 2rem; margin-top: 10px; font-weight: normal; }
-        .lyric-box { margin-top: 30px; height: 40px; color: #446699; font-size: 1.3rem; text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); transition: opacity 0.3s; opacity: 1; font-weight: bold; }
+        
+        /* --- 3. 歌词栏样式 --- */
+        .lyric-box { 
+            margin-top: 30px; 
+            height: 50px; 
+            color: #5577aa; 
+            font-size: 1.3rem; 
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8); 
+            transition: opacity 0.3s; 
+            opacity: 1; 
+            font-weight: bold; 
+            padding: 0 10px;
+        }
+
+        /* --- 4. 心动文案机样式 (新功能) --- */
+        #love-quote {
+            margin-top: 15px;
+            color: #ff99ac;
+            font-size: 1.1rem; 
+            height: 30px;
+            transition: opacity 1s;
+        }
+
+        /* --- 5. 音乐按钮 --- */
         .music-btn { position: fixed; top: 20px; right: 20px; z-index: 999; width: 40px; height: 40px; background: rgba(255, 255, 255, 0.6); border-radius: 50%; border: 2px solid #ff5e78; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 10px rgba(255, 94, 120, 0.3); }
         .rotate { animation: spin 3s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .music-icon { width: 20px; height: 20px; fill: #ff5e78; }
+        
+        /* --- 6. 动画特效 --- */
         .jelly { animation: jelly 0.6s; }
         @keyframes jelly { 0%, 100% { transform: scale(1, 1); } 25% { transform: scale(0.9, 1.1); } 50% { transform: scale(1.1, 0.9); } 75% { transform: scale(0.95, 1.05); } }
-        @media (max-width: 768px) { h1 { font-size: 2.8rem; } h2 { font-size: 1.5rem; } .lyric-box { font-size: 1.1rem; } }
+        
+        /* 手机适配 */
+        @media (max-width: 768px) { h1 { font-size: 2.8rem; } h2 { font-size: 1.5rem; } .lyric-box { font-size: 1.1rem; } #love-quote { font-size: 1rem; } }
         .hint { position: absolute; bottom: 20px; width: 100%; text-align: center; color: #aaa; font-size: 0.8rem; z-index: 5; opacity: 0.7; }
     </style>
 </head>
@@ -44,39 +78,23 @@
     <div class="container">
         <h1 id="main-text" onclick="bounce(this)">阿佳宝宝</h1>
         <h2 onclick="bounce(this)">我爱你</h2>
-        <div class="lyric-box" id="lyric-display"></div>
+        
+        <div class="lyric-box" id="lyric-display">♪ 音乐加载中...</div>
+        
+        <div id="love-quote">❤ 情不知所起，一往而深</div>
     </div>
 
     <div class="hint">点击屏幕开启惊喜</div>
 
     <script>
         // ==========================================
-        //  👇 请把你的 LRC 文件内容粘贴到下面两个反引号中间
+        //  👇 1. 歌词部分 (已帮你替换好表白开场)
         // ==========================================
         const lrcFileContent = `
-[00:00.0]恋爱画板 - 锦零
-[00:00.13]词：李师珏
-[00:00.2]曲：李师珏
-[00:00.28]编曲：李师珏
-[00:00.38]音乐制作人：张博文Bryan Z
-[00:00.57]吉他：齐成刚
-[00:00.66]和音编写：金钊
-[00:00.77]和音：王超
-[00:00.85]混音/母带工程：李晨曦
-[00:01.04]录音师：丁有钱
-[00:01.15]录音棚：KG音乐工厂
-[00:01.31]混音/母带工作室：Bryan Z Music Studio
-[00:01.53]制作助理：宋子楚/刘哲/袁永达
-[00:01.8]监制：张博文Bryan Z
-[00:01.93]音乐制作：华昇音乐（天津）有限公司
-[00:02.2]封面设计：Zisswn
-[00:02.29]音乐项目总监：宫尹琳Rainie
-[00:02.48]总企划：马越/陈钰彬
-[00:02.66]企划营销：Hot Cake Studio
-[00:02.79]OP：天津华昇集团有限公司
-[00:03.0]SP：Hot Cake Studio
-[00:03.07]出品：Hot Cake Studio
-[00:03.17]「未经许可 不得翻唱翻录或使用」
+[00:00.00]To: 最爱的阿佳宝宝
+[00:01.00]这是一首只属于你的歌
+[00:02.00]准备好接收我的爱意了吗
+[00:03.00]我们的故事，开始啰...
 [00:03.46]爱情有紫色红色蓝色白色四种颜色
 [00:09.05]绘画出恋爱中绚烂的世界
 [00:27.11]开始的时候
@@ -113,54 +131,72 @@
 [03:06.48]但你的一切我了解
 [03:12.46]但你的一切我了解
 `;
-        // ==========================================
 
-        // --- 1. LRC 解析器 (自动把上面的文字转换成代码能读懂的时间) ---
+        // ==========================================
+        //  👇 2. 心动文案机 (自动切换情话)
+        // ==========================================
+        const loveQuotes = [
+            "情不知所起，一往而深",
+            "喜欢你，没有理由，也没有期限",
+            "万物皆甜，而你胜过万物",
+            "你是我所有的温柔心事",
+            "不用倒数日子，因为每一天都爱你",
+            "遇见你，所有星星都落到了我头上",
+            "晓看天色暮看云，行也思君，坐也思君",
+            "心跳的声音，只有你能听懂",
+            "世界上美好的东西不多，立秋傍晚吹来的风，和笑起来的你"
+        ];
+        
+        let quoteIndex = 0;
+        const quoteDiv = document.getElementById("love-quote");
+        
+        setInterval(() => {
+            quoteDiv.style.opacity = 0; // 淡出
+            setTimeout(() => {
+                quoteIndex = (quoteIndex + 1) % loveQuotes.length;
+                quoteDiv.innerText = "❤ " + loveQuotes[quoteIndex];
+                quoteDiv.style.opacity = 1; // 淡入
+            }, 1000);
+        }, 4000); // 4秒换一次
+
+        // ==========================================
+        //  👇 3. 核心功能逻辑 (无需修改)
+        // ==========================================
+        
+        // --- 强力 LRC 解析器 ---
         function parseLrc(lrc) {
+            if (!lrc) return [];
             const lines = lrc.split('\n');
             const result = [];
             for (let line of lines) {
-                // 正则表达式匹配 [00:00.00] 格式
-                const match = line.match(/\[(\d{2}):(\d{2})(\.\d{2,3})?\](.*)/);
+                const match = line.match(/\[(\d+):(\d+)(\.\d+)?\](.*)/);
                 if (match) {
                     const min = parseInt(match[1]);
                     const sec = parseInt(match[2]);
                     const ms = match[3] ? parseFloat(match[3]) : 0;
-                    const text = match[4].trim(); // 获取歌词文本
-                    
-                    // 算出总秒数
+                    const text = match[4].trim(); 
                     const time = min * 60 + sec + ms;
-                    
-                    if (text) { // 如果这行有字才加进去
-                        result.push({ time, text });
-                    }
+                    if (text) result.push({ time, text });
                 }
             }
             return result;
         }
 
-        // 解析歌词
         const lyricData = parseLrc(lrcFileContent);
-
-        // --- 2. 歌词同步逻辑 ---
         const lyricDisplay = document.getElementById('lyric-display');
+
+        // --- 歌词同步 ---
         const audio = document.getElementById('bgm');
-        
         audio.addEventListener('timeupdate', function() {
             const currentTime = audio.currentTime;
-            
-            // 查找当前时间对应的歌词
-            let currentText = "";
-            for (let i = 0; i < lyricData.length; i++) {
+            let currentText = "♪"; 
+            for (let i = lyricData.length - 1; i >= 0; i--) {
                 if (currentTime >= lyricData[i].time) {
                     currentText = lyricData[i].text;
-                } else {
-                    break; 
+                    break;
                 }
             }
-            
             if (lyricDisplay.innerText !== currentText) {
-                // 简单的淡入淡出效果
                 lyricDisplay.style.opacity = 0;
                 setTimeout(() => {
                     lyricDisplay.innerText = currentText;
@@ -169,14 +205,13 @@
             }
         });
 
-        // --- 3. 音乐控制与特效 (保持不变) ---
+        // --- 音乐控制 ---
         const musicBtn = document.getElementById('musicBtn');
-        let isPlaying = true; 
+        let isPlaying = false; 
 
         window.addEventListener('load', () => {
              audio.play().catch(() => {
-                 isPlaying = false;
-                 musicBtn.classList.remove('rotate');
+                 lyricDisplay.innerText = "点击屏幕播放音乐 ♪";
              });
         });
 
@@ -200,6 +235,7 @@
             event.stopPropagation();
         }
 
+        // --- 背景特效 ---
         function bounce(element) {
             element.classList.remove('jelly');
             void element.offsetWidth;
@@ -212,69 +248,33 @@
 
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        let width, height;
-        let hearts = [];
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
+        let width, height, hearts = [];
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize); resize();
+        
         class Heart {
             constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 15 + 5;
-                this.speedX = Math.random() * 4 - 2;
-                this.speedY = Math.random() * -3 - 1;
-                this.color = `hsla(${Math.random() * 60 + 330}, 100%, 70%, 1)`;
-                this.life = 1;
-                this.decay = Math.random() * 0.02 + 0.01;
+                this.x = x; this.y = y; this.size = Math.random() * 15 + 5;
+                this.speedX = Math.random() * 4 - 2; this.speedY = Math.random() * -3 - 1;
+                this.color = `hsla(${Math.random() * 60 + 330}, 100%, 70%, 1)`; this.life = 1; this.decay = Math.random() * 0.02 + 0.01;
             }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.size -= 0.1;
-                this.life -= this.decay;
-            }
+            update() { this.x += this.speedX; this.y += this.speedY; this.size -= 0.1; this.life -= this.decay; }
             draw() {
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.life;
-                ctx.beginPath();
+                ctx.fillStyle = this.color; ctx.globalAlpha = this.life; ctx.beginPath();
                 let topCurveHeight = this.size * 0.3;
                 ctx.moveTo(this.x, this.y + topCurveHeight);
                 ctx.bezierCurveTo(this.x, this.y, this.x - this.size / 2, this.y, this.x - this.size / 2, this.y + topCurveHeight);
                 ctx.bezierCurveTo(this.x - this.size / 2, this.y + (this.size + topCurveHeight) / 2, this.x, this.y + (this.size + topCurveHeight) / 2 + topCurveHeight, this.x, this.y + this.size);
                 ctx.bezierCurveTo(this.x, this.y + (this.size + topCurveHeight) / 2 + topCurveHeight, this.x + this.size / 2, this.y + (this.size + topCurveHeight) / 2, this.x + this.size / 2, this.y + topCurveHeight);
                 ctx.bezierCurveTo(this.x + this.size / 2, this.y, this.x, this.y, this.x, this.y + topCurveHeight);
-                ctx.fill();
-                ctx.globalAlpha = 1;
+                ctx.fill(); ctx.globalAlpha = 1;
             }
         }
         function createHeart(x, y) { hearts.push(new Heart(x, y)); }
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            for (let i = 0; i < hearts.length; i++) {
-                hearts[i].update();
-                hearts[i].draw();
-                if (hearts[i].life <= 0 || hearts[i].size <= 0) { hearts.splice(i, 1); i--; }
-            }
-            requestAnimationFrame(animate);
-        }
+        function animate() { ctx.clearRect(0, 0, width, height); for (let i = 0; i < hearts.length; i++) { hearts[i].update(); hearts[i].draw(); if (hearts[i].life <= 0 || hearts[i].size <= 0) { hearts.splice(i, 1); i--; } } requestAnimationFrame(animate); }
         animate();
         window.addEventListener('mousemove', (e) => { createHeart(e.clientX, e.clientY); });
-        window.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            for (let i = 0; i < e.touches.length; i++) { createHeart(e.touches[i].clientX, e.touches[i].clientY); }
-        }, { passive: false });
-        window.addEventListener('touchstart', (e) => {
-            for (let i = 0; i < e.touches.length; i++) {
-                createHeart(e.touches[i].clientX, e.touches[i].clientY);
-                createHeart(e.touches[i].clientX, e.touches[i].clientY);
-            }
-        });
+        window.addEventListener('touchmove', (e) => { e.preventDefault(); for (let i = 0; i < e.touches.length; i++) { createHeart(e.touches[i].clientX, e.touches[i].clientY); } }, { passive: false });
         setInterval(() => { createHeart(Math.random() * width, height + 20); }, 500);
     </script>
 </body>
